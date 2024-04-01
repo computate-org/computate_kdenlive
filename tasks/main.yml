@@ -1,0 +1,41 @@
+---
+- name: "Install dependencies: {{ APP_DEPENDENCIES | join(' ') }}"
+  shell: "pkcon install -y {{ item }} | true"
+  loop: "{{ APP_DEPENDENCIES }}"
+- name: "Create the directory {{ APP_SRC }}"
+  file:
+    name: "{{ APP_SRC }}"
+    state: directory
+- name: "Check for the README file {{ APP_README }}"
+  stat:
+    path: "{{ APP_README }}"
+  register: APP_README_PATH
+- name: "Clone the {{ APP_REPO }} source code into {{ APP_SRC }}"
+  git:
+    repo: "{{ APP_REPO }}"
+    dest: "{{ APP_SRC }}"
+    version: "{{ APP_TAG }}"
+  when: not APP_README_PATH.stat.exists
+  ignore_errors: true
+- name: "Create the build directory {{ APP_SRC }}/build"
+  file:
+    name: "{{ APP_SRC }}/build"
+    state: directory
+- name: "Run the cmake script in {{ APP_SRC }}: cmake .. -GNinja -DCMAKE_INSTALL_PREFIX={{ APP_PREFIX }} -DKDE_INSTALL_USE_QT_SYS_PATHS=ON -DRELEASE_BUILD=OFF -DQT_MAJOR_VERSION=5 -DBUILD_WITH_QT6=OFF"
+  shell:
+    cmd: "cmake .. -DCMAKE_INSTALL_PREFIX={{ APP_PREFIX }} -DKDE_INSTALL_USE_QT_SYS_PATHS=ON -DRELEASE_BUILD=OFF -DQT_MAJOR_VERSION=5 -DBUILD_WITH_QT6=OFF"
+    chdir: "{{ APP_SRC }}/build"
+- name: "Run the make script in {{ APP_SRC }}/build"
+  shell:
+    cmd: make -j $(nproc)
+    chdir: "{{ APP_SRC }}/build"
+- name: "Run the make install script in {{ APP_SRC }}/build"
+  shell:
+    cmd: make install
+    chdir: "{{ APP_SRC }}/build"
+  become: true
+- name: "Create the launcher {{ APP_DESKTOP }}"
+  template:
+    src: app.desktop
+    dest: "{{ APP_DESKTOP }}"
+

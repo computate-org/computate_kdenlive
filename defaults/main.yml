@@ -1,0 +1,98 @@
+---
+APP_PYTHON: "{{ '/usr/bin/python' if lookup('file', '/usr/bin/python', errors='ignore') else '/usr/bin/python3' }}"
+APP_DEPENDENCIES_REDHAT:
+  - git
+  - libSM-devel
+  - clang-devel
+  - ninja-build
+  - SDL2-devel
+  - extra-cmake-modules
+  - fftw-devel
+  - frei0r-devel
+  - gtk2-devel
+  - kf5-karchive-devel
+  - kf5-kbookmarks-devel
+  - kf5-kcodecs-devel
+  - kf5-kcodecs
+  - kf5-kcoreaddons-devel
+  - kf5-kconfig-devel
+  - kf5-kconfigwidgets-devel
+  - kf5-kio-devel
+  - kf5-kwidgetsaddons-devel
+  - kf5-knotifyconfig-devel
+  - kf5-knewstuff-devel
+  - kf5-knewstuff
+  - kf5-kxmlgui-devel
+  - kf5-kxmlgui
+  - kf5-knotifications-devel
+  - kf5-kguiaddons-devel
+  - kf5-ktextwidgets-devel
+  - kf5-kiconthemes-devel
+  - kf5-solid-devel
+  - kf5-kfilemetadata-devel
+  - kf5-purpose-devel
+  - kf5-kdoctools-devel
+  - qt6-qt5compat-devel
+  - kf5-kcrash-devel
+  - kf5-kdbusaddons-devel
+  - kf5-breeze-icon-theme-devel
+  - kf5-kdeclarative-devel
+  - kf5-ki18n-devel
+  - kf5-kinit-devel
+  - kf5-kitemviews-devel
+  - kf5-kjobwidgets-devel
+  - kf5-kplotting-devel
+  - ladspa-devel
+  - libarchive-devel
+  - libebur128-devel
+  - libexif-devel
+  - libogg-devel
+  - librttr-devel
+  - libsamplerate-devel
+  - libvorbis-devel
+  - mlt-devel
+  - mlt
+  - movit-devel
+  - opencv-devel
+  - pipewire-jack-audio-connection-kit-devel
+  - qt5-qtbase-devel
+  - qt5-qtnetworkauth-devel
+  - qt5-qtquickcontrols2-devel
+  - qt5-qtwebkit-devel
+  - qt5-qtmultimedia-devel
+  - qt5-qtsvg-devel
+  - rubberband-devel
+  - sdl12-compat-devel
+  - sox-devel
+  - vid.stab-devel
+  - xine-lib-devel
+  - ffmpeg
+  - desktop-file-utils
+  - fdupes
+  - hicolor-icon-theme
+  - shared-mime-info
+  - mesa-libGL-devel
+  - mesa-libGLU-devel
+  - glew-devel
+  - libv4l
+  - mlt-devel
+  - libX11-devel
+APP_DEPENDENCIES: "{{ APP_DEPENDENCIES_REDHAT if ansible_distribution_file_variety == 'RedHat' else APP_DEPENDENCIES_REDHAT }}"
+APP_NAME: kdenlive
+APP_DISPLAY_NAME: Kdenlive
+APP_GENERIC_NAME: A video editor
+APP_COMMENT: Edit videos
+APP_USER: "{{ lookup('env', 'USER') }}"
+APP_GROUP: "{{ APP_USER }}"
+APP_PREFIX: "{{ lookup('env', 'HOME') }}/.local"
+APP_SRC: "{{ APP_PREFIX }}/src/{{ APP_NAME  }}"
+APP_SHARE: "{{ APP_PREFIX }}/share/{{ APP_NAME  }}"
+APP_REPO: https://github.com/KDE/kdenlive.git
+APP_TAG: v24.02.1
+APP_DESKTOP: "{{ lookup('env', 'HOME') }}/.local/share/applications/{{ APP_NAME }}.desktop"
+APP_README: "{{ APP_SRC }}/README.md"
+APP_ICON: "{{ APP_SRC }}data/icons/128-apps-kdenlive.png"
+APP_EXEC: "{{ APP_PREFIX }}/bin/kdenlive"
+APP_KEYWORDS: "videos;movies;"
+APP_CATEGORIES: "Utility;Accessibility;"
+
